@@ -560,6 +560,27 @@ unset COLCON_CURRENT_PREFIX
 # do not unset _colcon_prepend_unique_value since it might be used by non-primary shell hooks
 """
 
+package_xml = """\
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>{ref_name}</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="danimtb@todo.todo">danimtb</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
+"""
+
 package_zsh = """\
 # generated from colcon_zsh/shell/template/package.zsh.em
 
@@ -697,6 +718,7 @@ class Ament(CMakeDeps):
                 (os.path.join("install", ref_name, "share", ref_name, "package.dsv"), package_dsv.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "package.ps1"), package_ps1.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "package.sh"), package_sh.format(output_folder=output_folder, ref_name=ref_name)),
+                (os.path.join("install", ref_name, "share", ref_name, "package.xml"), package_xml.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "package.zsh"), package_zsh.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "environment", "ament_prefix_path.dsv"), ament_prefix_path_dsv),
                 (os.path.join("install", ref_name, "share", ref_name, "environment", "ament_prefix_path.sh"), ament_prefix_path_sh),
