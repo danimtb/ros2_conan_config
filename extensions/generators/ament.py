@@ -705,7 +705,7 @@ class Ament(CMakeDeps):
         for dep, _ in self._conanfile.dependencies.items():
             ref_name = dep.ref.name
             paths_content = [
-                (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "package_run_dependencies", ref_name), ""),
+                (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "package_run_dependencies", ref_name), "ament_lint_auto;ament_lint_common"),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "packages", ref_name), ""),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "parent_prefix_path", ref_name), "/opt/ros/humble"),
                 (os.path.join("install", ref_name, "share", "colcon-core", "packages", ref_name), ""),
