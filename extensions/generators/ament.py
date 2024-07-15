@@ -15,7 +15,7 @@ _package_local_setup_AMENT_CURRENT_PREFIX=$AMENT_CURRENT_PREFIX
 
 # trace output
 if [ -n "$AMENT_TRACE_SETUP_FILES" ]; then
-  echo "# . \"$_this_path/local_setup.sh\""
+  echo "# . \\"$_this_path/local_setup.sh\\""
 fi
 . "$_this_path/local_setup.sh"
 unset _this_path
@@ -84,15 +84,15 @@ ament_append_value() {{
   #echo "value $_value"
 
   # avoid leading separator
-  eval _values=\"\$$_listname\"
+  eval _values=\\"\$$_listname\\"
   if [ -z "$_values" ]; then
-    eval export $_listname=\"$_value\"
+    eval export $_listname=\\"$_value\\"
     #eval echo "set list \$$_listname"
   else
     # field separator must not be a colon
     _ament_append_value_IFS=$IFS
     unset IFS
-    eval export $_listname=\"\$$_listname:$_value\"
+    eval export $_listname=\\"\$$_listname:$_value\\"
     #eval echo "append list \$$_listname"
     IFS=$_ament_append_value_IFS
     unset _ament_append_value_IFS
@@ -136,12 +136,12 @@ ament_append_unique_value() {{
   if [ -z "$_duplicate" ]; then
     # avoid leading separator
     if [ -z "$_values" ]; then
-      eval $_listname=\"$_value\"
+      eval $_listname=\\"$_value\\"
       #eval echo "set list \$$_listname"
     else
       # field separator must not be a colon
       unset IFS
-      eval $_listname=\"\$$_listname:$_value\"
+      eval $_listname=\\"\$$_listname:$_value\\"
       #eval echo "append list \$$_listname"
     fi
   fi
@@ -165,7 +165,7 @@ ament_prepend_unique_value() {{
   #echo "value $_value"
 
   # check if the list contains the value
-  eval _values=\"\$$_listname\"
+  eval _values=\\"\$$_listname\\"
   _duplicate=
   _ament_prepend_unique_value_IFS=$IFS
   IFS=":"
@@ -187,12 +187,12 @@ ament_prepend_unique_value() {{
   if [ -z "$_duplicate" ]; then
     # avoid trailing separator
     if [ -z "$_values" ]; then
-      eval export $_listname=\"$_value\"
+      eval export $_listname=\\"$_value\\"
       #eval echo "set list \$$_listname"
     else
       # field separator must not be a colon
       unset IFS
-      eval export $_listname=\"$_value:\$$_listname\"
+      eval export $_listname=\\"$_value:\$$_listname\\"
       #eval echo "prepend list \$$_listname"
     fi
   fi
@@ -229,7 +229,7 @@ if [ -z "$AMENT_RETURN_ENVIRONMENT_HOOKS" ]; then
       IFS=$_package_local_setup_IFS
       # trace output
       if [ -n "$AMENT_TRACE_SETUP_FILES" ]; then
-        echo "# . \"$_hook\""
+        echo "# . \\"$_hook\\""
       fi
       . "$_hook"
     fi
@@ -263,13 +263,13 @@ ament_zsh_to_array() {
   local _listname=$1
   local _dollar="$"
   local _split="{="
-  local _to_array="(\"$_dollar$_split$_listname}\")"
+  local _to_array="(\\"$_dollar$_split$_listname}\\")"
   eval $_listname=$_to_array
 }
 
 # trace output
 if [ -n "$AMENT_TRACE_SETUP_FILES" ]; then
-  echo "# . \"$_this_path/local_setup.sh\""
+  echo "# . \\"$_this_path/local_setup.sh\\""
 fi
 # the package-level local_setup file unsets AMENT_CURRENT_PREFIX
 . "$_this_path/local_setup.sh"
@@ -326,11 +326,11 @@ fi
 _colcon_package_bash_source_script() {{
   if [ -f "$1" ]; then
     if [ -n "$COLCON_TRACE" ]; then
-      echo "# . \"$1\""
+      echo "# . \\"$1\\""
     fi
     . "$@"
   else
-    echo "not found: \"$1\"" 1>&2
+    echo "not found: \\"$1\\"" 1>&2
   fi
 }}
 
@@ -495,7 +495,7 @@ _colcon_prepend_unique_value() {{
   _value="$2"
 
   # get values from variable
-  eval _values=\"\$$_listname\"
+  eval _values=\\"\$$_listname\\"
   # backup the field separator
   _colcon_prepend_unique_value_IFS=$IFS
   IFS=":"
@@ -523,7 +523,7 @@ _colcon_prepend_unique_value() {{
   IFS=$_colcon_prepend_unique_value_IFS
   unset _colcon_prepend_unique_value_IFS
   # export the updated variable
-  eval export $_listname=\"$_all_values\"
+  eval export $_listname=\\"$_all_values\\"
   unset _all_values
   unset _values
 
@@ -537,7 +537,7 @@ _colcon_prepend_unique_value() {{
 _colcon_package_sh_COLCON_CURRENT_PREFIX="{output_folder}/install/{ref_name}"
 if [ -z "$COLCON_CURRENT_PREFIX" ]; then
   if [ ! -d "$_colcon_package_sh_COLCON_CURRENT_PREFIX" ]; then
-    echo "The build time path \"$_colcon_package_sh_COLCON_CURRENT_PREFIX\" doesn't exist. Either source a script for a different shell or set the environment variable \"COLCON_CURRENT_PREFIX\" explicitly." 1>&2
+    echo "The build time path \\"$_colcon_package_sh_COLCON_CURRENT_PREFIX\\" doesn't exist. Either source a script for a different shell or set the environment variable \\"COLCON_CURRENT_PREFIX\\" explicitly." 1>&2
     unset _colcon_package_sh_COLCON_CURRENT_PREFIX
     return 1
   fi
@@ -551,11 +551,11 @@ unset _colcon_package_sh_COLCON_CURRENT_PREFIX
 _colcon_package_sh_source_script() {{
   if [ -f "$1" ]; then
     if [ -n "$COLCON_TRACE" ]; then
-      echo "# . \"$1\""
+      echo "# . \\"$1\\""
     fi
     . "$@"
   else
-    echo "not found: \"$1\"" 1>&2
+    echo "not found: \\"$1\\"" 1>&2
   fi
 }}
 
@@ -609,11 +609,11 @@ fi
 _colcon_package_zsh_source_script() {{
   if [ -f "$1" ]; then
     if [ -n "$COLCON_TRACE" ]; then
-      echo "# . \"$1\""
+      echo "# . \\"$1\\""
     fi
     . "$@"
   else
-    echo "not found: \"$1\"" 1>&2
+    echo "not found: \\"$1\\"" 1>&2
   fi
 }}
 
@@ -623,7 +623,7 @@ colcon_zsh_convert_to_array() {{
   local _listname=$1
   local _dollar="$"
   local _split="{{="
-  local _to_array="(\"$_dollar$_split$_listname}}\")"
+  local _to_array="(\\"$_dollar$_split$_listname}}\\")"
   eval $_listname=$_to_array
 }}
 
