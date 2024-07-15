@@ -748,7 +748,8 @@ class Ament(CMakeDeps):
                 (os.path.join("install", ref_name, "share", ref_name, "hook", "cmake_prefix_path.sh"), cmake_prefix_path_sh),
             ]
             for path, content in paths_content:
-                save(self._conanfile, path, content)
+                with open(path, "w") as handle:
+                  handle.write(content)
             generator_files = self.content
             for generator_file, content in generator_files.items():
                 file_path = os.path.join("install", ref_name, "share", ref_name, "cmake", generator_file)
