@@ -705,6 +705,12 @@ cmake_prefix_path_sh = """\
 _colcon_prepend_unique_value CMAKE_PREFIX_PATH "$COLCON_CURRENT_PREFIX"
 """
 
+cmakelists_txt = """\
+cmake_minimum_required(VERSION 3.8)
+project({ref_name})
+"""
+
+
 
 class Ament(CMakeDeps):
     def __init__(self, conanfile):
@@ -722,6 +728,8 @@ class Ament(CMakeDeps):
         for dep, _ in self._conanfile.dependencies.items():
             ref_name = dep.ref.name
             paths_content = [
+                (os.path.join(ref_name, "package.xml"), package_xml.format(ref_name=ref_name)),
+                (os.path.join(ref_name, "CMakeLists.txt"), cmakelists_txt.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "package_run_dependencies", ref_name), "ament_lint_auto;ament_lint_common"),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "packages", ref_name), ""),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "parent_prefix_path", ref_name), "/opt/ros/humble"),
