@@ -700,7 +700,7 @@ cmakelists_txt = """\
 cmake_minimum_required(VERSION 3.8)
 project({ref_name})
 
-install(FILES ${CMAKE_SOURCE_DIR}/package.xml TYPE DATA)
+install(FILES ${{CMAKE_SOURCE_DIR}}/package.xml TYPE DATA)
 """
 
 
