@@ -729,6 +729,7 @@ class Ament(object):
 
         for dep, cpp_info in self._conanfile.dependencies.items():
             if not dep.direct:
+                # Only direct depdendencies should be included
                 continue
             ref_name = dep.ref.name
             ref_version = dep.ref.version
@@ -743,7 +744,6 @@ class Ament(object):
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "packages", ref_name), ""),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "parent_prefix_path", ref_name), "/opt/ros/humble"),
                 (os.path.join("install", ref_name, "share", "colcon-core", "packages", ref_name), ""),
-                # (os.path.join("install", ref_name, "share", ref_name, "cmake", f"{ref_name}Config.cmake"), ""),
                 (os.path.join("install", ref_name, "share", ref_name, "local_setup.bash"), local_setup_bash),
                 (os.path.join("install", ref_name, "share", ref_name, "local_setup.dsv"), local_setup_dsv.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "local_setup.sh"), local_setup_sh.format(output_folder=output_folder, ref_name=ref_name)),
@@ -768,5 +768,6 @@ class Ament(object):
                 save(self._conanfile, path, content)
             generator_files = self.cmakedeps.content
             for generator_file, content in generator_files.items():
+                # Create CMake files in install/<ref_name>/share/<ref_name>/cmake directory
                 file_path = os.path.join("install", ref_name, "share", ref_name, "cmake", generator_file)
                 save(self._conanfile, file_path, content)
