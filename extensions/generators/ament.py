@@ -707,6 +707,10 @@ project({ref_name})
 install(FILES ${{CMAKE_SOURCE_DIR}}/package.xml DESTINATION data)
 """
 
+gitignore = """\
+*
+"""
+
 
 
 class Ament(object):
@@ -733,6 +737,7 @@ class Ament(object):
 
             paths_content = [
                 (os.path.join(ref_name, "package.xml"), package_xml.format(ref_name=ref_name, ref_version=ref_version, ref_description=ref_description, ref_license=ref_license)),
+                (os.path.join(ref_name, ".gitignore"), gitignore),
                 (os.path.join(ref_name, "CMakeLists.txt"), cmakelists_txt.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "package_run_dependencies", ref_name), "ament_lint_auto;ament_lint_common"),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "packages", ref_name), ""),
