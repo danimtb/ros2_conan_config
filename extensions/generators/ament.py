@@ -578,6 +578,10 @@ package_xml = """\
   <description>{ref_description}</description>
   <maintainer email="info@conan.io">conan</maintainer>
   <license>{ref_license}</license>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>
 """
 
