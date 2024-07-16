@@ -699,6 +699,8 @@ _colcon_prepend_unique_value CMAKE_PREFIX_PATH "$COLCON_CURRENT_PREFIX"
 cmakelists_txt = """\
 cmake_minimum_required(VERSION 3.8)
 project({ref_name})
+
+install(FILES ${CMAKE_SOURCE_DIR}/package.xml TYPE DATA)
 """
 
 
@@ -717,11 +719,13 @@ class Ament(object):
         # conan_library-consumer\install\package_dep\share\package_dep\cmake\package_depConfig.cmake
         output_folder = self._conanfile.generators_folder
 
-        for dep, _ in self._conanfile.dependencies.items():
+        for dep, cpp_info in self._conanfile.dependencies.items():
+            if not dep.direct:
+                continue
             ref_name = dep.ref.name
             ref_version = dep.ref.version
-            ref_description = dep.ref.description or "unknown"
-            ref_license = dep.ref.license or "unknown"
+            ref_description = cpp_info.description or "unknown"
+            ref_license = cpp_info.license or "unknown"
 
             paths_content = [
                 (os.path.join(ref_name, "package.xml"), package_xml.format(ref_name=ref_name, ref_version=ref_version, ref_description=ref_description, ref_license=ref_license)),
