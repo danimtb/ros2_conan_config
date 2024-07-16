@@ -574,19 +574,10 @@ package_xml = """\
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>{ref_name}</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="danimtb@todo.todo">danimtb</maintainer>
-  <license>TODO: License declaration</license>
-
-  <buildtool_depend>ament_cmake</buildtool_depend>
-
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
-
-  <export>
-    <build_type>ament_cmake</build_type>
-  </export>
+  <version>{ref_version}</version>
+  <description>{ref_description}</description>
+  <maintainer email="info@conan.io">conan</maintainer>
+  <license>{ref_license}</license>
 </package>
 """
 
@@ -712,9 +703,10 @@ project({ref_name})
 
 
 
-class Ament(CMakeDeps):
+class Ament(object):
+
     def __init__(self, conanfile):
-        CMakeDeps.__init__(self, conanfile)
+        self.cmakedeps = CMakeDeps(conanfile)
         self._conanfile = conanfile
 
     def generate(self):
@@ -724,11 +716,15 @@ class Ament(CMakeDeps):
         # conan_library-consumer\install\package_dep\share\colcon-core\packages\package_dep : poco
         # conan_library-consumer\install\package_dep\share\package_dep\cmake\package_depConfig.cmake
         output_folder = self._conanfile.generators_folder
-        deps_info = ""
+
         for dep, _ in self._conanfile.dependencies.items():
             ref_name = dep.ref.name
+            ref_version = dep.ref.version
+            ref_description = dep.ref.description or "unknown"
+            ref_license = dep.ref.license or "unknown"
+
             paths_content = [
-                (os.path.join(ref_name, "package.xml"), package_xml.format(ref_name=ref_name)),
+                (os.path.join(ref_name, "package.xml"), package_xml.format(ref_name=ref_name, ref_version=ref_version, ref_description=ref_description, ref_license=ref_license)),
                 (os.path.join(ref_name, "CMakeLists.txt"), cmakelists_txt.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "package_run_dependencies", ref_name), "ament_lint_auto;ament_lint_common"),
                 (os.path.join("install", ref_name, "share", "ament_index", "resource_index", "packages", ref_name), ""),
@@ -743,7 +739,7 @@ class Ament(CMakeDeps):
                 (os.path.join("install", ref_name, "share", ref_name, "package.dsv"), package_dsv.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "package.ps1"), package_ps1.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "package.sh"), package_sh.format(output_folder=output_folder, ref_name=ref_name)),
-                (os.path.join("install", ref_name, "share", ref_name, "package.xml"), package_xml.format(ref_name=ref_name)),
+                (os.path.join("install", ref_name, "share", ref_name, "package.xml"), package_xml.format(ref_name=ref_name, ref_version=ref_version, ref_description=ref_description, ref_license=ref_license)),
                 (os.path.join("install", ref_name, "share", ref_name, "package.zsh"), package_zsh.format(ref_name=ref_name)),
                 (os.path.join("install", ref_name, "share", ref_name, "environment", "ament_prefix_path.dsv"), ament_prefix_path_dsv),
                 (os.path.join("install", ref_name, "share", ref_name, "environment", "ament_prefix_path.sh"), ament_prefix_path_sh),
@@ -757,7 +753,7 @@ class Ament(CMakeDeps):
             ]
             for path, content in paths_content:
                 save(self._conanfile, path, content)
-            generator_files = self.content
+            generator_files = self.cmakedeps.content
             for generator_file, content in generator_files.items():
                 file_path = os.path.join("install", ref_name, "share", ref_name, "cmake", generator_file)
                 save(self._conanfile, file_path, content)
