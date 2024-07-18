@@ -779,8 +779,10 @@ class Ament(object):
 
     def generate_cmake_files(self, ref_name, require_name):
         for generator_file, content in self.cmakedeps_files.items():
+            print(f"CMakeDeps generator file name: {generator_file}")
             # Create CMake files in install/<ref_name>/share/<ref_name>/cmake directory
-            if require_name in generator_file.lower():  # FIXME: This is a way to save only the require_name related cmake files, however, names might not match!!
+            if require_name in generator_file.lower() or "cmakedeps_macros.cmake" in generator_file.lower():
+              # FIXME: This is a way to save only the require_name related cmake files (and helper cmake files), however, names might not match!!
               file_path = os.path.join("install", ref_name, "share", require_name, "cmake", generator_file)
               save(self._conanfile, file_path, content)
 
