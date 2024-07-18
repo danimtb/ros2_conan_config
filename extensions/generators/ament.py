@@ -740,7 +740,7 @@ class Ament(object):
             self.generate_direct_dependency(ament_ref_name, ref_name, ref_version, ref_description, ref_license)
             print(f"{ref_name} dependencies:", dep.dependencies.items())
             for req, _ in dep.dependencies.items():
-                self.generate_transitive_dependency(ref_name, req.ref.name)
+                self.generate_transitive_dependency(ament_ref_name, req.ref.name)
                 print(f"{ref_name} dependency: ", req.ref.name)
 
     def generate_direct_dependency(self, ament_ref_name, ref_name, ref_version, ref_description, ref_license):
@@ -776,7 +776,7 @@ class Ament(object):
         for path, content in paths_content:
             save(self._conanfile, path, content)
 
-        self.generate_cmake_files(ament_ref_name, ref_name, ref_name)
+        self.generate_cmake_files(ament_ref_name, ref_name)
 
     def generate_cmake_files(self, ament_ref_name, require_name):
         for generator_file, content in self.cmakedeps_files.items():
